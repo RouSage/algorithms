@@ -23,7 +23,7 @@ func TestBinarySearch(t *testing.T) {
 		{
 			arr:    []int64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 20, 30},
 			target: 20,
-			want:   11,
+			want:   10,
 		},
 		{
 			arr:    []int64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},

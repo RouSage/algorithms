@@ -2,18 +2,19 @@ package search
 
 func BinarySearch[V int64 | float64](arr []V, target V) int {
 	idx := -1
-	low, high := 0, len(arr)-1
+	low, high := 0, len(arr)
 
-	for low <= high {
-		mid := low + (high-low)/2
+	for low < high {
+		mid := (low + high) / 2
+		val := arr[mid]
 
-		if arr[mid] == target {
+		if val == target {
 			idx = mid
 			break
-		} else if arr[mid] < target {
+		} else if val < target {
 			low = mid + 1
 		} else {
-			high = mid - 1
+			high = mid
 		}
 	}
 
