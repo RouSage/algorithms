@@ -14,7 +14,7 @@ func TwoCrystallBalls(breaks []bool) int {
 
 	i -= jump
 
-	for j := 0; j <= jump && j < len(breaks); j++ {
+	for j := 0; j <= jump && i < len(breaks); j++ {
 		if breaks[i] {
 			return i
 		}
