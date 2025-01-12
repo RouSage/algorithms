@@ -1,13 +1,13 @@
 package structures
 
-type node[T any] struct {
+type qNode[T any] struct {
 	value T
-	next  *node[T]
+	next  *qNode[T]
 }
 
 type Queue[T any] struct {
-	head *node[T]
-	tail *node[T]
+	head *qNode[T]
+	tail *qNode[T]
 	size int
 }
 
@@ -18,7 +18,7 @@ func NewQueue[T any]() *Queue[T] {
 }
 
 func (q *Queue[T]) Enqueue(item T) {
-	value := &node[T]{
+	value := &qNode[T]{
 		value: item,
 	}
 
