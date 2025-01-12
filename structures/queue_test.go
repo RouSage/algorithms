@@ -64,4 +64,12 @@ func TestQueue(t *testing.T) {
 		Equal(t, ok, false)
 		Equal(t, val, 0)
 	})
+
+	t.Run("IsEmpty", func(t *testing.T) {
+		q := NewQueue[int]()
+		Equal(t, q.IsEmpty(), true)
+
+		q.Enqueue(1)
+		Equal(t, q.IsEmpty(), false)
+	})
 }

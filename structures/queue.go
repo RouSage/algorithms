@@ -22,7 +22,7 @@ func (q *Queue[T]) Enqueue(item T) {
 		value: item,
 	}
 
-	if q.size == 0 {
+	if q.IsEmpty() {
 		q.tail, q.head = value, value
 	} else {
 		q.tail.next = value
@@ -33,7 +33,7 @@ func (q *Queue[T]) Enqueue(item T) {
 }
 
 func (q *Queue[T]) Dequeue() (T, bool) {
-	if q.size == 0 {
+	if q.IsEmpty() {
 		var zero T
 		return zero, false
 	}
@@ -44,7 +44,7 @@ func (q *Queue[T]) Dequeue() (T, bool) {
 	q.head = head.next
 	head.next = nil
 
-	if q.size == 0 {
+	if q.IsEmpty() {
 		q.tail = nil
 	}
 
@@ -52,12 +52,16 @@ func (q *Queue[T]) Dequeue() (T, bool) {
 }
 
 func (q *Queue[T]) Peek() (T, bool) {
-	if q.size == 0 {
+	if q.IsEmpty() {
 		var zero T
 		return zero, false
 	}
 
 	return q.head.value, true
+}
+
+func (q *Queue[T]) IsEmpty() bool {
+	return q.size == 0
 }
 
 func (q *Queue[T]) Size() int {
