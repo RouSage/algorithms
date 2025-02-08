@@ -22,3 +22,21 @@ func walkPreOrder[T comparable](curr *binaryNode[T], path []T) []T {
 
 	return path
 }
+
+func InOrderSearch[T comparable](root *binaryNode[T]) []T {
+	return walkInOrder(root, []T{})
+}
+
+func walkInOrder[T comparable](curr *binaryNode[T], path []T) []T {
+	if curr == nil {
+		return path
+	}
+
+	path = walkInOrder(curr.left, path)
+
+	path = append(path, curr.value)
+
+	path = walkInOrder(curr.right, path)
+
+	return path
+}
