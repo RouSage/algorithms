@@ -73,18 +73,19 @@ func BreadthFirstSearch[T comparable](root *binaryNode[T], value T) bool {
 	for !queue.IsEmpty() {
 		curr, ok := queue.Dequeue()
 		if !ok {
-			return false
+			// Should never happen since the IsEmpty() check is done before the Dequeue()
+			panic("Queue is empty")
+		}
+
+		if curr == nil {
+			continue
 		}
 		if curr.value == value {
 			return true
 		}
 
-		if curr.left != nil {
-			queue.Enqueue(curr.left)
-		}
-		if curr.right != nil {
-			queue.Enqueue(curr.right)
-		}
+		queue.Enqueue(curr.left)
+		queue.Enqueue(curr.right)
 	}
 
 	return false
