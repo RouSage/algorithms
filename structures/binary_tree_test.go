@@ -57,3 +57,15 @@ func TestInOrderSearch(t *testing.T) {
 		Equal(t, val, expected[i])
 	}
 }
+
+func TestPostOrderSearch(t *testing.T) {
+	root := newTree()
+	expected := []int{5, 6, 4, 3, 2, 8, 7, 1}
+	actual := PostOrderSearch(root)
+
+	Equal(t, len(actual), len(expected))
+
+	for i, val := range actual {
+		Equal(t, val, expected[i])
+	}
+}
