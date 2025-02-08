@@ -6,6 +6,10 @@ type binaryNode[T comparable] struct {
 	right *binaryNode[T]
 }
 
+// ######
+// Depth First Search
+// ######
+
 func PreOrderSearch[T comparable](root *binaryNode[T]) []T {
 	return walkPreOrder(root, []T{})
 }
@@ -56,4 +60,32 @@ func walPostOrder[T comparable](curr *binaryNode[T], path []T) []T {
 	path = append(path, curr.value)
 
 	return path
+}
+
+// ######
+// Breadth First Search
+// ######
+
+func BreadthFirstSearch[T comparable](root *binaryNode[T], value T) bool {
+	queue := NewQueue[*binaryNode[T]]()
+	queue.Enqueue(root)
+
+	for !queue.IsEmpty() {
+		curr, ok := queue.Dequeue()
+		if !ok {
+			return false
+		}
+		if curr.value == value {
+			return true
+		}
+
+		if curr.left != nil {
+			queue.Enqueue(curr.left)
+		}
+		if curr.right != nil {
+			queue.Enqueue(curr.right)
+		}
+	}
+
+	return false
 }

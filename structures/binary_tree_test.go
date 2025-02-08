@@ -69,3 +69,21 @@ func TestPostOrderSearch(t *testing.T) {
 		Equal(t, val, expected[i])
 	}
 }
+
+func TestBreadthFirstSearch(t *testing.T) {
+	root := newTree()
+	tests := []struct {
+		value int
+		want  bool
+	}{
+		{value: 6, want: true},
+		{value: 7, want: true},
+		{value: 12, want: false},
+		{value: 100, want: false},
+	}
+
+	for _, tt := range tests {
+		got := BreadthFirstSearch(root, tt.value)
+		Equal(t, got, tt.want)
+	}
+}
