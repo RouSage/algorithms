@@ -48,6 +48,7 @@ func TestLinkedList(t *testing.T) {
 		removed, ok = list.Remove(5)
 		Equal(t, list.Size(), 3)
 		Equal(t, ok, false)
+		Equal(t, removed, 0)
 	})
 
 	t.Run("RemoveAt", func(t *testing.T) {
@@ -66,6 +67,7 @@ func TestLinkedList(t *testing.T) {
 		removed, ok = list.RemoveAt(4)
 		Equal(t, list.Size(), 3)
 		Equal(t, ok, false)
+		Equal(t, removed, 0)
 	})
 
 	t.Run("Append", func(t *testing.T) {
