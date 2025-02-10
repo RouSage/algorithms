@@ -62,6 +62,20 @@ func walPostOrder[T comparable](curr *binaryNode[T], path []T) []T {
 	return path
 }
 
+func CompareTrees[T comparable](t1, t2 *binaryNode[T]) bool {
+	if t1 == nil && t2 == nil {
+		return true
+	}
+	if t1 == nil || t2 == nil {
+		return false
+	}
+	if t1.value != t2.value {
+		return false
+	}
+
+	return CompareTrees(t1.left, t2.left) && CompareTrees(t1.right, t2.right)
+}
+
 // ######
 // Breadth First Search
 // ######

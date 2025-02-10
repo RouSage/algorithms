@@ -70,6 +70,28 @@ func TestPostOrderSearch(t *testing.T) {
 	}
 }
 
+func TestCompareTrees(t *testing.T) {
+	t1 := newTree()
+	t2 := newTree()
+	actual := CompareTrees(t1, t2)
+
+	Equal(t, actual, true)
+
+	t2.right = nil
+	actual = CompareTrees(t1, t2)
+
+	Equal(t, actual, false)
+
+	t1.right = nil
+	actual = CompareTrees(t1, t2)
+
+	Equal(t, actual, true)
+
+	t1.left.value = 120
+	actual = CompareTrees(t1, t2)
+	Equal(t, actual, false)
+}
+
 func TestBreadthFirstSearch(t *testing.T) {
 	root := newTree()
 	tests := []struct {
