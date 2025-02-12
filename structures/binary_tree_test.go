@@ -109,3 +109,55 @@ func TestBreadthFirstSearch(t *testing.T) {
 		Equal(t, got, tt.want)
 	}
 }
+
+func newBinarySearchTree() *binaryNode[int] {
+	return &binaryNode[int]{
+		value: 10,
+		left: &binaryNode[int]{
+			value: 5,
+			left: &binaryNode[int]{
+				value: 2,
+				left: &binaryNode[int]{
+					value: 1,
+				},
+			},
+			right: &binaryNode[int]{
+				value: 6,
+			},
+		},
+		right: &binaryNode[int]{
+			value: 15,
+			left: &binaryNode[int]{
+				value: 14,
+			},
+			right: &binaryNode[int]{
+				value: 20,
+			},
+		},
+	}
+}
+
+func TestSearchBinarySearchTree(t *testing.T) {
+	root := newBinarySearchTree()
+
+	tests := []struct {
+		value int
+		want  bool
+	}{
+		{value: 10, want: true},
+		{value: 5, want: true},
+		{value: 2, want: true},
+		{value: 1, want: true},
+		{value: 6, want: true},
+		{value: 15, want: true},
+		{value: 14, want: true},
+		{value: 20, want: true},
+		{value: 12, want: false},
+		{value: 11, want: false},
+	}
+
+	for _, tt := range tests {
+		got := SearchBinarySearchTree(root, tt.value)
+		Equal(t, got, tt.want)
+	}
+}

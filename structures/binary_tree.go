@@ -76,6 +76,25 @@ func CompareTrees[T comparable](t1, t2 *binaryNode[T]) bool {
 	return CompareTrees(t1.left, t2.left) && CompareTrees(t1.right, t2.right)
 }
 
+func SearchBinarySearchTree[T int | float64](root *binaryNode[T], value T) bool {
+	return search(root, value)
+}
+
+func search[T int | float64](curr *binaryNode[T], value T) bool {
+	if curr == nil {
+		return false
+	}
+
+	if curr.value == value {
+		return true
+	}
+	if curr.value < value {
+		return search(curr.right, value)
+	}
+
+	return search(curr.left, value)
+}
+
 // ######
 // Breadth First Search
 // ######
