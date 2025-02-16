@@ -46,16 +46,16 @@ func walkInOrder[T comparable](curr *binaryNode[T], path []T) []T {
 }
 
 func PostOrderSearch[T comparable](root *binaryNode[T]) []T {
-	return walPostOrder(root, []T{})
+	return walkPostOrder(root, []T{})
 }
 
-func walPostOrder[T comparable](curr *binaryNode[T], path []T) []T {
+func walkPostOrder[T comparable](curr *binaryNode[T], path []T) []T {
 	if curr == nil {
 		return path
 	}
 
-	path = walPostOrder(curr.left, path)
-	path = walPostOrder(curr.right, path)
+	path = walkPostOrder(curr.left, path)
+	path = walkPostOrder(curr.right, path)
 
 	path = append(path, curr.value)
 
