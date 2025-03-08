@@ -58,3 +58,46 @@ func GraphBreadthFirstSearch(graph weightedAdjacencyMatrix, source, target int) 
 
 	return nil
 }
+
+type graphEdge struct {
+	to, weight int
+}
+
+type weightedAdjacencyList = [][]graphEdge
+
+func walkGraph(graph weightedAdjacencyList, curr, target int, seen []bool, path *[]int) bool {
+	if seen[curr] {
+		return false
+	}
+
+	seen[curr] = true
+	*path = append(*path, curr)
+
+	if curr == target {
+		return true
+	}
+
+	list := graph[curr]
+	for _, edge := range list {
+		if walkGraph(graph, edge.to, target, seen, path) {
+			return true
+		}
+	}
+
+	*path = (*path)[:len(*path)-1]
+
+	return false
+}
+
+func GraphDepthFirstSearch(graph weightedAdjacencyList, source, target int) []int {
+	seen := make([]bool, len(graph))
+	path := make([]int, 0)
+
+	walkGraph(graph, source, target, seen, &path)
+
+	if len(path) != 0 {
+		return path
+	}
+
+	return nil
+}
