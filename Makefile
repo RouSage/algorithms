@@ -24,10 +24,10 @@ run:
 ## tidy: format all .go files and tidy module dependencies
 .PHONY: tidy
 tidy:
-	@echo 'Formatting .go files...'
-	go fmt ./...
 	@echo 'Tidying module dependencies...'
 	go mod tidy
+	@echo 'Formatting .go files...'
+	go fmt ./...
 	@echo 'Verifying module dependencies'
 	go mod verify
 
@@ -39,7 +39,7 @@ audit:
 	go mod verify
 	@echo 'Vetting code...'
 	go vet ./...
-	staticcheck ./...
+	go tool staticcheck ./...
 	go test -race -vet=off ./...
 
 ## test: run unit tests
