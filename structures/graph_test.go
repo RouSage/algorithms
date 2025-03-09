@@ -6,13 +6,13 @@ import (
 	. "github.com/go-playground/assert/v2"
 )
 
-func TestGraphBreadthFirstSearch(t *testing.T) {
+func TestGraphMatrixBFS(t *testing.T) {
 	//     >(1)<--->(4) ---->(5)
 	//    /          |       /|
 	// (0)     ------|------- |
 	//    \   v      v        v
 	//     >(2) --> (3) <----(6)
-	graph1 := weightedAdjacencyMatrix{
+	graph1 := GraphMatrix{
 		{0, 3, 1, 0, 0, 0, 0},
 		{0, 0, 0, 0, 1, 0, 0},
 		{0, 0, 7, 0, 0, 0, 0},
@@ -26,7 +26,7 @@ func TestGraphBreadthFirstSearch(t *testing.T) {
 	//  | \    |
 	//  v  \   v
 	// (1)  ->(2)
-	graph2 := weightedAdjacencyMatrix{
+	graph2 := GraphMatrix{
 		{0, 20, 19, 18},
 		{17, 0, 16, 0},
 		{0, 0, 0, 15},
@@ -34,7 +34,7 @@ func TestGraphBreadthFirstSearch(t *testing.T) {
 	}
 
 	tests := []struct {
-		graph    weightedAdjacencyMatrix
+		graph    GraphMatrix
 		source   int
 		target   int
 		expected []int
@@ -71,7 +71,7 @@ func TestGraphBreadthFirstSearch(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		actual := GraphBreadthFirstSearch(tt.graph, tt.source, tt.target)
+		actual := tt.graph.BreadthFirstSearch(tt.source, tt.target)
 
 		if tt.expected == nil {
 			Equal(t, actual, nil)
@@ -85,13 +85,13 @@ func TestGraphBreadthFirstSearch(t *testing.T) {
 	}
 }
 
-func TestGraphDepthFirstSearch(t *testing.T) {
+func TestGraphListDFS(t *testing.T) {
 	//     >(1)<--->(4) ---->(5)
 	//    /          |       /|
 	// (0)     ------|------- |
 	//    \   v      v        v
 	//     >(2) --> (3) <----(6)
-	graph := weightedAdjacencyList{
+	graph := GraphList{
 		{
 			graphEdge{to: 1, weight: 3},
 			graphEdge{to: 2, weight: 1},
@@ -118,7 +118,7 @@ func TestGraphDepthFirstSearch(t *testing.T) {
 	}
 
 	tests := []struct {
-		graph    weightedAdjacencyList
+		graph    GraphList
 		source   int
 		target   int
 		expected []int
@@ -144,7 +144,7 @@ func TestGraphDepthFirstSearch(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		actual := GraphDepthFirstSearch(tt.graph, tt.source, tt.target)
+		actual := tt.graph.DepthFirstSearch(tt.source, tt.target)
 
 		if tt.expected == nil {
 			Equal(t, actual, nil)
@@ -164,7 +164,7 @@ func TestDijkstraList(t *testing.T) {
 	// (0)   | ------|------- |
 	//    \  |/      |        |
 	//      (2) --- (3) ---- (6)
-	graph := weightedAdjacencyList{
+	graph := GraphList{
 		{
 			graphEdge{to: 1, weight: 3},
 			graphEdge{to: 2, weight: 1},
@@ -201,7 +201,7 @@ func TestDijkstraList(t *testing.T) {
 	}
 
 	tests := []struct {
-		graph    weightedAdjacencyList
+		graph    GraphList
 		source   int
 		target   int
 		expected []int
@@ -227,7 +227,7 @@ func TestDijkstraList(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		actual := DijkstraList(tt.graph, tt.source, tt.target)
+		actual := tt.graph.Dijkstra(tt.source, tt.target)
 
 		Equal(t, len(tt.expected), len(actual))
 

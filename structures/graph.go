@@ -5,12 +5,12 @@ import (
 	"slices"
 )
 
-type weightedAdjacencyMatrix = [][]int
+type GraphMatrix [][]int
 
-func GraphBreadthFirstSearch(graph weightedAdjacencyMatrix, source, target int) []int {
+func (g GraphMatrix) BreadthFirstSearch(source, target int) []int {
 	queue := NewQueue[int]()
-	seen := make([]bool, len(graph))
-	prev := make([]int, len(graph))
+	seen := make([]bool, len(g))
+	prev := make([]int, len(g))
 
 	for i := range prev {
 		prev[i] = -1
@@ -29,7 +29,7 @@ func GraphBreadthFirstSearch(graph weightedAdjacencyMatrix, source, target int) 
 			break
 		}
 
-		adjs := graph[curr]
+		adjs := g[curr]
 		for i, v := range adjs {
 			if v == 0 {
 				continue
@@ -64,9 +64,9 @@ type graphEdge struct {
 	to, weight int
 }
 
-type weightedAdjacencyList = [][]graphEdge
+type GraphList [][]graphEdge
 
-func walkGraph(graph weightedAdjacencyList, curr, target int, seen []bool, path *[]int) bool {
+func (g GraphList) walkGraph(curr, target int, seen []bool, path *[]int) bool {
 	if seen[curr] {
 		return false
 	}
@@ -78,9 +78,9 @@ func walkGraph(graph weightedAdjacencyList, curr, target int, seen []bool, path 
 		return true
 	}
 
-	list := graph[curr]
+	list := g[curr]
 	for _, edge := range list {
-		if walkGraph(graph, edge.to, target, seen, path) {
+		if g.walkGraph(edge.to, target, seen, path) {
 			return true
 		}
 	}
@@ -90,17 +90,61 @@ func walkGraph(graph weightedAdjacencyList, curr, target int, seen []bool, path 
 	return false
 }
 
-func GraphDepthFirstSearch(graph weightedAdjacencyList, source, target int) []int {
-	seen := make([]bool, len(graph))
+func (g GraphList) DepthFirstSearch(source, target int) []int {
+	seen := make([]bool, len(g))
 	path := make([]int, 0)
 
-	walkGraph(graph, source, target, seen, &path)
+	g.walkGraph(source, target, seen, &path)
 
 	if len(path) != 0 {
 		return path
 	}
 
 	return nil
+}
+
+func (g GraphList) Dijkstra(source, target int) []int {
+	seen := make([]bool, len(g))
+	prev := make([]int, len(g))
+	dists := make([]int, len(g))
+
+	for i := range dists {
+		dists[i] = math.MaxInt64
+		prev[i] = -1
+	}
+
+	dists[source] = 0
+
+	for hasUnvisited(seen, dists) {
+		curr := getLowestUnvisited(seen, dists)
+		seen[curr] = true
+
+		adjs := g[curr]
+		for _, edge := range adjs {
+			if seen[edge.to] {
+				continue
+			}
+
+			dist := dists[curr] + edge.weight
+			if dist < dists[edge.to] {
+				dists[edge.to] = dist
+				prev[edge.to] = curr
+			}
+		}
+	}
+
+	curr := target
+	out := make([]int, 0)
+
+	for prev[curr] != -1 {
+		out = append(out, curr)
+		curr = prev[curr]
+	}
+
+	out = append(out, source)
+	slices.Reverse(out)
+
+	return out
 }
 
 func hasUnvisited(seen []bool, dists []int) bool {
@@ -129,48 +173,4 @@ func getLowestUnvisited(seen []bool, dists []int) int {
 	}
 
 	return idx
-}
-
-func DijkstraList(graph weightedAdjacencyList, source, target int) []int {
-	seen := make([]bool, len(graph))
-	prev := make([]int, len(graph))
-	dists := make([]int, len(graph))
-
-	for i := range dists {
-		dists[i] = math.MaxInt64
-		prev[i] = -1
-	}
-
-	dists[source] = 0
-
-	for hasUnvisited(seen, dists) {
-		curr := getLowestUnvisited(seen, dists)
-		seen[curr] = true
-
-		adjs := graph[curr]
-		for _, edge := range adjs {
-			if seen[edge.to] {
-				continue
-			}
-
-			dist := dists[curr] + edge.weight
-			if dist < dists[edge.to] {
-				dists[edge.to] = dist
-				prev[edge.to] = curr
-			}
-		}
-	}
-
-	curr := target
-	out := make([]int, 0)
-
-	for prev[curr] != -1 {
-		out = append(out, curr)
-		curr = prev[curr]
-	}
-
-	out = append(out, source)
-	slices.Reverse(out)
-
-	return out
 }
