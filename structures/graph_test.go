@@ -157,3 +157,82 @@ func TestGraphDepthFirstSearch(t *testing.T) {
 		}
 	}
 }
+
+func TestDijkstraList(t *testing.T) {
+	//      (1) --- (4) ---- (5)
+	//    /  |       |       /|
+	// (0)   | ------|------- |
+	//    \  |/      |        |
+	//      (2) --- (3) ---- (6)
+	graph := weightedAdjacencyList{
+		{
+			graphEdge{to: 1, weight: 3},
+			graphEdge{to: 2, weight: 1},
+		},
+		{
+			graphEdge{to: 0, weight: 3},
+			graphEdge{to: 2, weight: 4},
+			graphEdge{to: 4, weight: 1},
+		},
+		{
+			graphEdge{to: 1, weight: 4},
+			graphEdge{to: 3, weight: 7},
+			graphEdge{to: 0, weight: 1},
+		},
+		{
+			graphEdge{to: 2, weight: 7},
+			graphEdge{to: 4, weight: 5},
+			graphEdge{to: 6, weight: 1},
+		},
+		{
+			graphEdge{to: 1, weight: 1},
+			graphEdge{to: 3, weight: 5},
+			graphEdge{to: 5, weight: 2},
+		},
+		{
+			graphEdge{to: 6, weight: 1},
+			graphEdge{to: 4, weight: 2},
+			graphEdge{to: 2, weight: 18},
+		},
+		{
+			graphEdge{to: 3, weight: 1},
+			graphEdge{to: 5, weight: 1},
+		},
+	}
+
+	tests := []struct {
+		graph    weightedAdjacencyList
+		source   int
+		target   int
+		expected []int
+	}{
+		{
+			graph:    graph,
+			source:   0,
+			target:   6,
+			expected: []int{0, 1, 4, 5, 6},
+		},
+		{
+			graph:    graph,
+			source:   4,
+			target:   1,
+			expected: []int{4, 1},
+		},
+		{
+			graph:    graph,
+			source:   5,
+			target:   0,
+			expected: []int{5, 4, 1, 0},
+		},
+	}
+
+	for _, tt := range tests {
+		actual := DijkstraList(tt.graph, tt.source, tt.target)
+
+		Equal(t, len(tt.expected), len(actual))
+
+		for i, v := range tt.expected {
+			Equal(t, v, actual[i])
+		}
+	}
+}

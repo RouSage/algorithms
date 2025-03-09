@@ -1,6 +1,7 @@
 package structures
 
 import (
+	"math"
 	"slices"
 )
 
@@ -100,4 +101,76 @@ func GraphDepthFirstSearch(graph weightedAdjacencyList, source, target int) []in
 	}
 
 	return nil
+}
+
+func hasUnvisited(seen []bool, dists []int) bool {
+	for i, s := range seen {
+		if !s && dists[i] < math.MaxInt64 {
+			return true
+		}
+	}
+
+	return false
+}
+
+func getLowestUnvisited(seen []bool, dists []int) int {
+	idx := -1
+	lowestDist := math.MaxInt64
+
+	for i, s := range seen {
+		if s {
+			continue
+		}
+
+		if lowestDist > dists[i] {
+			lowestDist = dists[i]
+			idx = i
+		}
+	}
+
+	return idx
+}
+
+func DijkstraList(graph weightedAdjacencyList, source, target int) []int {
+	seen := make([]bool, len(graph))
+	prev := make([]int, len(graph))
+	dists := make([]int, len(graph))
+
+	for i := range dists {
+		dists[i] = math.MaxInt64
+		prev[i] = -1
+	}
+
+	dists[source] = 0
+
+	for hasUnvisited(seen, dists) {
+		curr := getLowestUnvisited(seen, dists)
+		seen[curr] = true
+
+		adjs := graph[curr]
+		for _, edge := range adjs {
+			if seen[edge.to] {
+				continue
+			}
+
+			dist := dists[curr] + edge.weight
+			if dist < dists[edge.to] {
+				dists[edge.to] = dist
+				prev[edge.to] = curr
+			}
+		}
+	}
+
+	curr := target
+	out := make([]int, 0)
+
+	for prev[curr] != -1 {
+		out = append(out, curr)
+		curr = prev[curr]
+	}
+
+	out = append(out, source)
+	slices.Reverse(out)
+
+	return out
 }
