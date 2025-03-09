@@ -66,6 +66,56 @@ type graphEdge struct {
 
 type GraphList [][]graphEdge
 
+func (g GraphList) BreadthFirstSearch(source, target int) []int {
+	queue := NewQueue[int]()
+	seen := make([]bool, len(g))
+	prev := make([]int, len(g))
+
+	for i := range prev {
+		prev[i] = -1
+	}
+	seen[source] = true
+	queue.Enqueue(source)
+
+	for !queue.IsEmpty() {
+		curr, ok := queue.Dequeue()
+		if !ok {
+			// Should never happen since the IsEmpty() check is done before the Dequeue()
+			panic("Queue is empty")
+		}
+
+		if curr == target {
+			break
+		}
+
+		adjs := g[curr]
+		for _, edge := range adjs {
+			if seen[edge.to] {
+				continue
+			}
+
+			seen[edge.to] = true
+			prev[edge.to] = curr
+			queue.Enqueue(edge.to)
+		}
+	}
+
+	curr := target
+	out := make([]int, 0)
+
+	for prev[curr] != -1 {
+		out = append(out, curr)
+		curr = prev[curr]
+	}
+
+	if len(out) != 0 {
+		slices.Reverse(out)
+		return slices.Concat([]int{source}, out)
+	}
+
+	return nil
+}
+
 func (g GraphList) walkGraph(curr, target int, seen []bool, path *[]int) bool {
 	if seen[curr] {
 		return false
